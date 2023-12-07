@@ -1,0 +1,20 @@
+# Set the cluster name to make your cluster stand out from default names
+# like `cluster.local`.
+cluster_name: my-cluster.example.com
+
+# List here all domains which you will use to connect to the cluster nodes.
+supplementary_addresses_in_ssl_keys:
+  - cluster.local
+  - my-cluster.example.com
+  - node-1.my-cluster.example.com
+  - load-balancer.my-cluster.example.com
+  # Also will be good to list public ip addresses of nodes, if you use internal
+  # private network for communication between nodes.
+  - 1.2.3.4
+
+
+# Put here any additional configuration values, that you want to change from
+# Kubespray defaults, like this:
+# auto_renew_certificates: true
+# helm_enabled: true
+# local_volume_provisioner_enabled: true

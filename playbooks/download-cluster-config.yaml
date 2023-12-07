@@ -1,0 +1,14 @@
+- name: Download Kuberenetes config file
+  hosts: all
+  tasks:
+    - fetch:
+        src: /root/.kube/config
+        dest: ../cluster-access.yaml
+        flat: true
+
+- name: Set the Kuberenetes config file permissions
+  hosts: localhost
+  tasks:
+    - ansible.builtin.file:
+        path: ../cluster-access.yaml
+        mode: 0600

@@ -1,0 +1,14 @@
+- hosts: all
+  tasks:
+    - name: Initial update apt cache
+      ansible.builtin.command:
+        cmd: apt update
+      run_once: true
+
+    - name: Install common packages
+      ansible.builtin.package:
+        name: '{{ item }}'
+      loop:
+        # List here names of Linux packages which you want to install.
+        - htop
+        - net-tools

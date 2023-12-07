@@ -1,0 +1,55 @@
+# This file descibes the configuration of all nodes, using in the cluster.
+
+all:
+  # Ansible connection settings.
+  vars:
+    # Explicitly set the connection type to the node servers.
+    ansible_connection: ssh
+
+    # Explicitly set using root user, to not require sudo configuration.
+    # You can comment out this to use a regular user for connecting.
+    ansible_user: root
+
+  # The list of hosts that should be configured to use as nodes in the cluster.
+  hosts:
+    node1:
+      # Here is the hostname to connect to the node.
+      # If the node has no DNS name, put just its IP address here.
+      ansible_host: node1.my-cluster.example.com
+
+      # You can specify here a custom IP address of the node, if it by some
+      # reason differs from the hostname.
+      # access_ip: 1.2.3.4
+
+      # If your nodes have a private network, it's better to use it for internal
+      # communication between hosts, instead of the external network.
+      # If so, uncomment and put here the internal IP address of the node.
+      # ip: 10.0.0.2
+
+    # The same configuration for the second node and others. Uncomment and
+    # fill if you have more than one noce.
+    # node2:
+    #   ansible_host: node2.my-cluster.example.com
+
+  children:
+    # The list of hosts that should be included into the cluster
+    kube_node:
+      hosts:
+        node1:
+        # node2:
+
+    # The list of nodes that should be used as the control plane.
+    kube_control_plane:
+      hosts:
+        node1:
+
+    # The list of nodes that should be used as the etcd storage.
+    etcd:
+      hosts:
+        node1:
+
+    #
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
