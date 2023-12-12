@@ -13,18 +13,25 @@ all:
   # The list of hosts that should be configured to use as nodes in the cluster.
   hosts:
     node1:
-      # Here is the hostname to connect to the node.
-      # If the node has no DNS name, put just its IP address here.
+      # Put here a DNS name or an IP adress that will be used to connect to
+      # the node. It's better to use hostnames, because they can be kept if
+      # the IP address changes, but if your node has no DNS name, put just its
+      # IP address here.
       ansible_host: node1.my-cluster.example.com
-
-      # You can specify here a custom IP address of the node, if it by some
-      # reason differs from the hostname.
-      # access_ip: 1.2.3.4
 
       # If your nodes have a private network, it's better to use it for internal
       # communication between hosts, instead of the external network.
+      # More information here:
+      # https://github.com/kubernetes-sigs/kubespray/blob/master/docs/vars.md#addressing-variables
       # If so, uncomment and put here the internal IP address of the node.
       # ip: 10.0.0.2
+
+      # If the node public-facing IP address is different from the private IP
+      # address, you can specify here the external ip of the node.
+      # It is meant to be filled only in cases where the node is under NAT
+      # or when a load-balancer is used and the load-balancer IP is different
+      # from the host IP.
+      # access_ip: 1.2.3.4
 
     # The same configuration for the second node and others. Uncomment and
     # fill if you have more than one noce.
@@ -32,23 +39,24 @@ all:
     #   ansible_host: node2.my-cluster.example.com
 
   children:
-    # The list of hosts that should be included into the cluster
+    # List here the names of all nodes that should be included into the cluster.
     kube_node:
       hosts:
         node1:
         # node2:
 
-    # The list of nodes that should be used as the control plane.
+    # List here only nodes that should be used as the control plane.
     kube_control_plane:
       hosts:
         node1:
 
-    # The list of nodes that should be used as the etcd storage.
+    # List here only nodes that should be used as the etcd storage.
     etcd:
       hosts:
         node1:
 
-    #
+    # This is a list of all groups, that are included in your cluster.
+    # Usually no changes here are required.
     k8s_cluster:
       children:
         kube_control_plane:

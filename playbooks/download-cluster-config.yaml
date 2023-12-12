@@ -1,14 +1,36 @@
-- name: Download Kuberenetes config file
-  hosts: all
+- name: Copy of the Kuberenetes config file
+  hosts: k8s_cluster
+  vars:
+    # A source file, stores access configuration to the cluster.
+    cluster_config_file: /etc/kubernetes/admin.conf
+    # A temporary file to prepare the configuration file for access externally.
+    cluster_config_file_copy: /root/.kube/config_to_export
+    # A local path where the file will be stored on the local machine.
+    local_cluster_file: ../cluster-access.yaml
+
   tasks:
-    - fetch:
-        src: /root/.kube/config
-        dest: ../cluster-access.yaml
+    - name: Make a copy of the file to modify
+      command: "cp -f {{ cluster_config_file }} {{ cluster_config_file_copy }}"
+
+    - name: Replace the cluster url from localhost to a first listed domain
+      replace:
+        path: "{{ cluster_config_file_copy }}"
+        regexp: "^(\\s+server:\\s+https?:)//(.+?)(:\\d+)?$"
+        replace: "\\1//{{ ansible_host }}\\3"
+
+    - name: Copy the file from the cluster
+      fetch:
+        src: "{{ cluster_config_file_copy }}"
+        dest: "{{ local_cluster_file }}"
         flat: true
 
-- name: Set the Kuberenetes config file permissions
+    - name: Delete the copy of the file on the remote
+      command: "rm {{ cluster_config_file_copy }}"
+
+- name: Fix permissions and server connection string
   hosts: localhost
   tasks:
-    - ansible.builtin.file:
+    - name: Set file permissions to 0600
+      ansible.builtin.file:
         path: ../cluster-access.yaml
         mode: 0600
