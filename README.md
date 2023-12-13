@@ -30,12 +30,42 @@ local directory, and switch it to the desired release version.
 
 ## Quick start
 
-1. Add this repository as a submodule to your main git repository, where you
-   manage the whole cluster configuration.
+1. Clone this repository:
+   ```
+   git clone https://github.com/Murz-K8s/kubespray-inventory-base.git mycluster
+   cd mycluster
+   ```
 
 2. Copy the `inventory.sample` directory to the `inventory`:
    ```
-   cp -r kubespray/inventory.sample kubespray/inventory
+   cp -r inventory.sample inventory
+   ```
+
+3. Inspect all files in the `inventory` directory, read comments and fill
+   values, related to your cluster.
+
+4. Check the deployment:
+   ```
+   ./check.sh
+   ```
+   You should have [ansible](https://www.ansible.com/) installed on your system.
+
+5. Create the cluster:
+   ```
+   ./deploy.sh
+   ```
+6. Launch the script to download Kubernetes config file, which you can use
+   for remote access to your  cluster:
+   ```
+   ./get-cluster-config.sh
+   ```
+   It will create the `cluster-access.yaml` file in your directory. *Keep it
+   in secure place!*
+
+7. Upgrade the cluster after making changes in future:
+   ```
+   ./upgrade.sh
+   ```
 
 
 ## Host linux system configuration on nodes
