@@ -25,8 +25,17 @@ So, just clone this repo, set the nodes info and your cluster name by modifying
 a couple of strings, and that's it!
 
 The `Kubespray` is built in via a git submodule, so run the
-`git submodule update --remote` to download it into your local directory, and
-switch it to the desired release version.
+`git submodule update --init --remote --recursive` to download it into your
+local directory, and switch it to the desired release version.
+
+## Quick start
+
+1. Add this repository as a submodule to your main git repository, where you
+   manage the whole cluster configuration.
+
+2. Copy the `inventory.sample` directory to the `inventory`:
+   ```
+   cp -r kubespray/inventory.sample kubespray/inventory
 
 
 ## Host linux system configuration on nodes
