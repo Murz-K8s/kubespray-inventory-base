@@ -2,15 +2,16 @@
 # like `cluster.local`.
 cluster_name: my-cluster.example.com
 
-# List here all domains which you will use to connect to the cluster nodes.
+# List here all domains and IPs which you will use to connect to the cluster.
 supplementary_addresses_in_ssl_keys:
-  - cluster.local
   - my-cluster.example.com
   - node-1.my-cluster.example.com
   - load-balancer.my-cluster.example.com
+  - cluster.local
   # Also will be good to list public ip addresses of nodes, if you use internal
   # private network for communication between nodes.
-  - 1.2.3.4
+  # - "192.168.1.2"
+  # - "1.2.3.4"
 
 
 # Put here any additional configuration values, that you want to change from
